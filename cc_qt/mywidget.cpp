@@ -1,6 +1,6 @@
 #include "mywidget.h"
-#include <QVBOXLAYOUT>
-#include <QHBOXLAYOUT>
+#include <QVBoxLayout>
+#include <QHBoxLayout>
 #include <QSlider>
 #include <QLabel>
 #include <QButtonGroup>

@@ -2,7 +2,8 @@
 #include <QMouseEvent>
 #include <QOpenGLShaderProgram>
 #include <QCoreApplication>
-#include <GLUT/glut.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
 #include <math.h>
 #include <iostream>
 #include "vertex.h"
@@ -12,6 +13,8 @@
 #include "makeMesh.h"
 #include "subdivision.h"
 #include "offset.h"
+#include <iostream>
+
 using namespace std;
 
 Mesh glMesh;
@@ -218,7 +221,7 @@ void GLWidget::paintGL()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLUE);
         glOffsetMesh.drawMesh();
     }
-    glutSwapBuffers();
+    //glutSwapBuffers();
 }
 
 void GLWidget::resizeGL(int w, int h)
@@ -247,6 +250,34 @@ void GLWidget::timerEvent(QTimerEvent *event) {
     repaint();
 }
 
+void GLWidget::select(int x, int y)
+{
+    /*GLuint buff[64] = {0};
+    GLint hits, view[4];
+
+    glSelectBuffer(64, buff);
+    glGetIntegerv(GL_VIEWPORT, view);
+    glRenderMode(GL_SELECT);
+    glInitNames();
+    glPushName(0);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    gluPickMatrix(x, y, 4, 4, view);
+    gluPerspective(60, 1, 0.0001, 1000);
+    int sensitivity = 10;
+
+    int min_x = abs(x - sensitivity);
+    int max_x = x + sensitivity;
+    int min_y = abs(y - sensitivity);
+    int max_y = y + sensitivity;
+    for(auto&& vertex: glMesh.vertList){
+        std::cout << "x: " << vertex->position[0] << std::endl;
+        std::cout << "y: " << vertex->position[1] << std::endl;
+        std::cout << "z: " << vertex->position[2] << std::endl;
+    }*/
+}
+
 void GLWidget::mousePressEvent(QMouseEvent *event)
 {
     if (event->buttons() & Qt::LeftButton)
@@ -254,6 +285,7 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
         arcball_on = true;
         last_mx = cur_mx = event -> x();
         last_my = cur_my = event -> y();
+        this->select(event->pos().x(), event->pos().y());
     }
     else
     {

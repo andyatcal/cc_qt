@@ -1,8 +1,10 @@
 #include <QApplication>
-#include <GLUT/GLUT.h>
+#include <GL/glut.h>
+#include <GL/gl.h>
 #include "mywidget.h"
 #include <QDesktopWidget>
 #include <QSurfaceFormat>
+#include <iostream>
 
 #include "mainwindow.h"
 int main(int argc, char *argv[])
