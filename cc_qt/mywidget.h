@@ -2,7 +2,6 @@
 #define MYWIDGET_H
 
 #include <QWidget>
-#include "mymodel.h"
 
 QT_BEGIN_NAMESPACE
 class QSlider;
@@ -13,8 +12,11 @@ class GLWidget;
 
 class MyWidget : public QWidget
 {
+
+
 public:
     MyWidget();
+    ~MyWidget();
     GLWidget * myGLWidget;
     QSlider * brSlider;
     QSlider * bgSlider;

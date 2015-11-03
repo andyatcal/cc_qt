@@ -2,6 +2,8 @@
 #include <QMouseEvent>
 #include <QOpenGLShaderProgram>
 #include <QCoreApplication>
+#include <QFileDialog>
+#include <QString>
 #include <GLUT/glut.h>
 #include <math.h>
 #include <iostream>
@@ -26,6 +28,108 @@ GLfloat YELLOW[] = {.8f, .8f, 0.f, 1.f};
 GLfloat PURPLE[] = {.8f, 0.f, .8f, 1.f};
 GLfloat CYAN[] = {.0f, .8f, 0.8f, 1.f};
 
+void list_hits(GLint hits, GLuint *names)
+{
+  int i;
+
+  /*
+     For each hit in the buffer are allocated 4 bytes:
+     1. Number of hits selected (always one,
+     beacuse when we draw each object
+     we use glLoadName, so we replace the
+     prevous name in the stack)
+     2. Min Z
+     3. Max Z
+     4. Name of the hit (glLoadName)
+     */
+
+  printf("%d hits:\n", hits);
+
+  for (i = 0; i < hits; i++)
+    printf( "Number: %d\n"
+            "Min Z: %d\n"
+            "Max Z: %d\n"
+            "Name on stack: %d\n",
+            (GLubyte)names[i * 4],
+            (GLubyte)names[i * 4 + 1],
+            (GLubyte)names[i * 4 + 2],
+            (GLubyte)names[i * 4 + 3]
+          );
+
+  printf("\n");
+}
+
+void GLWidget::gl_select(int x, int y)
+ {
+    GLuint buff[64] = {0};
+    GLint hits, view[4];
+    int id;
+    /*
+        This choose the buffer where store the values for the selection data
+    */
+    glSelectBuffer(64, buff);
+
+    /*
+        This retrieves info about the viewport
+    */
+    glGetIntegerv(GL_VIEWPORT, view);
+    cout<<view[0]<<" "<<view[1]<<endl;
+    cout<<view[3]<<" "<<view[2]<<endl;
+    /*
+        Switching in selecton mode
+    */
+    glRenderMode(GL_SELECT);
+
+    /*
+        Clearing the names' stack
+        This stack contains all the info about the objects
+    */
+    glInitNames();
+    /*
+        Now fill the stack with one element (or glLoadName will generate an error)
+    */
+    glPushName(0);
+    /*
+        Now modify the viewing volume, restricting selection area around the cursor
+    */
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+        glLoadIdentity();
+        /*
+            restrict the draw to an area around the cursor
+        */
+        gluPickMatrix(x, y, 1.0, 1.0, view);
+        gluPerspective(60, (float)view[2]/(float)view[3], 0.0001, 1000.0);
+        /*
+            Draw the objects onto the screen
+        */
+        glMatrixMode(GL_MODELVIEW);
+
+        /*
+            draw only the names in the stack, and fill the array
+        */
+        //gluLookAt(0, 0, cameraDistance, 0, 0, 0, 0, 1, 0);
+        //glMultMatrixf(&glMesh.object2world[0][0]);
+        //glutSwapBuffers();
+        paintGL();
+        /*
+            Do you remeber? We do pushMatrix in PROJECTION mode
+        */
+        glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+
+    /*
+        get number of objects drawed in that area
+        and return to render mode
+    */
+    hits = glRenderMode(GL_RENDER);
+    /*
+        Print a list of the objects
+    */
+    list_hits(hits, buff);
+    glMatrixMode(GL_MODELVIEW);
+ }
+
 GLWidget::GLWidget()
 {
     fr = 1;
@@ -48,9 +152,20 @@ GLWidget::~GLWidget()
 {
 }
 
+void GLWidget::initCube() {
+    makeCube(glMesh, cubeX, cubeY, cubeZ);
+}
+
+void GLWidget::initSIF(QString filename) {
+    string file = filename.toStdString();
+    cout<<file<<endl;
+    makeWithSIF(glMesh, file);
+    init();
+    repaint();
+}
+
 void GLWidget::init()
 {
-    makeCube(glMesh, cubeX, cubeY, cubeZ);
     Subdivision myCC(glMesh);
     glMesh = myCC.ccSubdivision(ccLevel);
     glMesh.computeNormals();
@@ -124,6 +239,7 @@ void GLWidget::setBGB(int b)
 void GLWidget::setCubeX(int x)
 {
     cubeX = x * 1.0 / 10;
+    initCube();
     init();
     repaint();
 }
@@ -131,6 +247,7 @@ void GLWidget::setCubeX(int x)
 void GLWidget::setCubeY(int y)
 {
     cubeY = y * 1.0 / 10;
+    initCube();
     init();
     repaint();
 }
@@ -138,6 +255,7 @@ void GLWidget::setCubeY(int y)
 void GLWidget::setCubeZ(int z)
 {
     cubeZ = z * 1.0 / 10;
+    initCube();
     init();
     repaint();
 }
@@ -145,6 +263,7 @@ void GLWidget::setCubeZ(int z)
 void GLWidget::setLevel(int level)
 {
     ccLevel = level;
+    initCube();
     init();
     repaint();
 }
@@ -194,9 +313,17 @@ void GLWidget::setOffset(int offsetVal)
     }
 }
 
+void GLWidget::fetchFile()
+{
+    cout<<"Hey";
+    QString filename = QFileDialog::getOpenFileName(this, tr("Open SIF FIle"),"/Users");
+
+}
+
 void GLWidget::initializeGL()
 {
     setMinimumSize(500, 400);
+    initCube();
     init();
     initRendering();
 }
@@ -211,12 +338,12 @@ void GLWidget::paintGL()
     if(!offset)
     {
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, RED);
-        glMesh.drawMesh();
+        glMesh.selMesh();
     }
     else
     {
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLUE);
-        glOffsetMesh.drawMesh();
+        glOffsetMesh.selMesh();
     }
     glutSwapBuffers();
 }
@@ -258,6 +385,10 @@ void GLWidget::mousePressEvent(QMouseEvent *event)
     else
     {
         arcball_on = false;
+    }
+    if(event->button() & Qt::RightButton) {
+        cout<<"Hey"<<endl;
+        gl_select(event -> x(), this->height() - event -> y());
     }
 }
 

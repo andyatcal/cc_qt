@@ -41,6 +41,7 @@ public slots:
     void setWithOffsetTrue(bool withOffset);
     void setWithOffsetFalse(bool withOffset);
     void setOffset(int offsetVal);
+    void fetchFile();
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;
@@ -63,9 +64,12 @@ private:
     int last_mx, last_my, cur_mx, cur_my;
     bool arcball_on;
     void init();
+    void initCube();
+    void initSIF(QString filename);
     void makeOffsetMesh();
     vec3 get_arcball_vector(int x, int y);
     void initRendering();
+    void gl_select(int x, int y);
     enum MODES { MODE_OBJECT, MODE_CAMERA, MODE_LIGHT, MODE_LAST } view_mode;
     mat4 transforms[MODE_LAST];
     bool offset;

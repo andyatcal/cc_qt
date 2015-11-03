@@ -56,6 +56,8 @@ public:
     void addPolygonFace(vector<Vertex*> vertices, bool reverseOrder);
     // Draw mesh in OpenGL
     void drawMesh();
+    // Select mesh in OpenGL
+    void selMesh();
     // Build Boundary Pointers for Mesh.
     void buildBoundary();
     // Compute the vertex normals for every face and vertex of the mesh.
@@ -484,6 +486,68 @@ void Mesh::drawMesh() {
         Vertex * tempv;
         Edge * firstEdge = (*fIt) -> oneEdge;
         //cout<<"New Face: "<<endl;
+        glBegin(GL_POLYGON);
+        Edge * currEdge = firstEdge;
+        Edge * nextEdge;
+        //tempv = currEdge -> va;
+        //cout<<"Hmm?"<<endl;
+        //cout<<"Hello! I am on the "<<fIt - faceList.begin()<<" face."<<endl;
+        do {
+            if(tempFace == currEdge -> fa) {
+                tempv = currEdge -> vb;
+                nextEdge = currEdge -> nextVbFa;
+            } else {
+                if(currEdge -> mobius) {
+                    tempv = currEdge -> vb;
+                    nextEdge = currEdge -> nextVbFb;
+                } else {
+                    tempv = currEdge -> va;
+                    nextEdge = currEdge -> nextVaFb;
+                }
+            }
+            float normx;
+            float normy;
+            float normz;
+            if(tempv -> onMobius) {
+                vec3 vNormal = tempv -> normal;
+                if(dot(vNormal, fNormal) >= 0) {
+                    normx = tempv -> normal[0];
+                    normy = tempv -> normal[1];
+                    normz = tempv -> normal[2];
+                } else {
+                    normx = - tempv -> normal[0];
+                    normy = - tempv -> normal[1];
+                    normz = - tempv -> normal[2];
+                }
+            } else {
+                normx = tempv -> normal[0];
+                normy = tempv -> normal[1];
+                normz = tempv -> normal[2];
+            }
+            //cout<<"normx: "<<normx<<" normy: "<<normy<<" normz: "<<normz<<endl;
+            float x = tempv -> position[0];
+            float y = tempv -> position[1];
+            float z = tempv -> position[2];
+            glNormal3f(normx, normy, normz);
+            //cout<<"x: "<<x<<" y: "<<y<<" z: "<<z<<endl;
+            glVertex3f(x, y, z);
+            currEdge = nextEdge;
+            //cout<<"Current Vertex ID: "<<tempv -> ID<<endl;
+        } while(currEdge != firstEdge);
+        glEnd();
+    }
+}
+
+void Mesh::selMesh() {
+    Face * tempFace;
+    vector<Face*>::iterator fIt;
+    for(fIt = faceList.begin(); fIt < faceList.end(); fIt++) {
+        tempFace = (*fIt);
+        vec3 fNormal = tempFace -> normal;
+        Vertex * tempv;
+        Edge * firstEdge = (*fIt) -> oneEdge;
+        //cout<<"New Face: "<<endl;
+        glLoadName(1);
         glBegin(GL_POLYGON);
         Edge * currEdge = firstEdge;
         Edge * nextEdge;
