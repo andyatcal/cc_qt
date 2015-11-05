@@ -41,6 +41,7 @@ public slots:
     void setWithOffsetTrue(bool withOffset);
     void setWithOffsetFalse(bool withOffset);
     void setOffset(int offsetVal);
+    void fetchFile();
 protected:
     void initializeGL() Q_DECL_OVERRIDE;
     void paintGL() Q_DECL_OVERRIDE;

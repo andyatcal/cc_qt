@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_GLWidget_t {
-    QByteArrayData data[24];
-    char stringdata0[198];
+    QByteArrayData data[25];
+    char stringdata0[208];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -52,7 +52,8 @@ QT_MOC_LITERAL(19, 130, 17), // "setWithOffsetTrue"
 QT_MOC_LITERAL(20, 148, 10), // "withOffset"
 QT_MOC_LITERAL(21, 159, 18), // "setWithOffsetFalse"
 QT_MOC_LITERAL(22, 178, 9), // "setOffset"
-QT_MOC_LITERAL(23, 188, 9) // "offsetVal"
+QT_MOC_LITERAL(23, 188, 9), // "offsetVal"
+QT_MOC_LITERAL(24, 198, 9) // "fetchFile"
 
     },
     "GLWidget\0setBGR\0\0r\0setBGG\0g\0setBGB\0b\0"
@@ -60,7 +61,8 @@ QT_MOC_LITERAL(23, 188, 9) // "offsetVal"
     "setLevel\0level\0setWireFrameTrue\0"
     "wireframe\0setWireFrameFalse\0"
     "setWithOffsetTrue\0withOffset\0"
-    "setWithOffsetFalse\0setOffset\0offsetVal"
+    "setWithOffsetFalse\0setOffset\0offsetVal\0"
+    "fetchFile"
 };
 #undef QT_MOC_LITERAL
 
@@ -70,7 +72,7 @@ static const uint qt_meta_data_GLWidget[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-      12,   14, // methods
+      13,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -78,18 +80,19 @@ static const uint qt_meta_data_GLWidget[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    1,   74,    2, 0x0a /* Public */,
-       4,    1,   77,    2, 0x0a /* Public */,
-       6,    1,   80,    2, 0x0a /* Public */,
-       8,    1,   83,    2, 0x0a /* Public */,
-      10,    1,   86,    2, 0x0a /* Public */,
-      12,    1,   89,    2, 0x0a /* Public */,
-      14,    1,   92,    2, 0x0a /* Public */,
-      16,    1,   95,    2, 0x0a /* Public */,
-      18,    1,   98,    2, 0x0a /* Public */,
-      19,    1,  101,    2, 0x0a /* Public */,
-      21,    1,  104,    2, 0x0a /* Public */,
-      22,    1,  107,    2, 0x0a /* Public */,
+       1,    1,   79,    2, 0x0a /* Public */,
+       4,    1,   82,    2, 0x0a /* Public */,
+       6,    1,   85,    2, 0x0a /* Public */,
+       8,    1,   88,    2, 0x0a /* Public */,
+      10,    1,   91,    2, 0x0a /* Public */,
+      12,    1,   94,    2, 0x0a /* Public */,
+      14,    1,   97,    2, 0x0a /* Public */,
+      16,    1,  100,    2, 0x0a /* Public */,
+      18,    1,  103,    2, 0x0a /* Public */,
+      19,    1,  106,    2, 0x0a /* Public */,
+      21,    1,  109,    2, 0x0a /* Public */,
+      22,    1,  112,    2, 0x0a /* Public */,
+      24,    0,  115,    2, 0x0a /* Public */,
 
  // slots: parameters
     QMetaType::Void, QMetaType::Int,    3,
@@ -104,6 +107,7 @@ static const uint qt_meta_data_GLWidget[] = {
     QMetaType::Void, QMetaType::Bool,   20,
     QMetaType::Void, QMetaType::Bool,   20,
     QMetaType::Void, QMetaType::Int,   23,
+    QMetaType::Void,
 
        0        // eod
 };
@@ -126,6 +130,7 @@ void GLWidget::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, vo
         case 9: _t->setWithOffsetTrue((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 10: _t->setWithOffsetFalse((*reinterpret_cast< bool(*)>(_a[1]))); break;
         case 11: _t->setOffset((*reinterpret_cast< int(*)>(_a[1]))); break;
+        case 12: _t->fetchFile(); break;
         default: ;
         }
     }
@@ -156,13 +161,13 @@ int GLWidget::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 12)
+        if (_id < 13)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 12;
+        _id -= 13;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 12)
+        if (_id < 13)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 12;
+        _id -= 13;
     }
     return _id;
 }

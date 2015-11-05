@@ -12,6 +12,7 @@
 #include <QButtonGroup>
 #include <QRadioButton>
 #include <QtDebug>
+#include <QPushButton>
 #include "myglwidget.h"
 
 MyWidget::MyWidget()
@@ -97,4 +98,9 @@ MyWidget::MyWidget()
     offsetSlider -> setMinimum(2);
     offsetSlider -> setMaximum(20);
     offsetSlider -> setValue(11);
+    QHBoxLayout * fileLayout;
+    controlsLayout -> addLayout(fileLayout = new QHBoxLayout);
+    QPushButton * fileInput;
+    fileLayout -> addWidget(fileInput = new QPushButton("Open SIF File"));
+    connect(fileInput, SIGNAL(clicked()), myGLWidget, SLOT(fetchFile()));
 }

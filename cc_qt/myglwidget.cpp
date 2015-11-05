@@ -9,6 +9,8 @@
 #include <QMouseEvent>
 #include <QOpenGLShaderProgram>
 #include <QCoreApplication>
+#include <QFileDialog>
+#include <QMessageBox>
 #include <math.h>
 #include <iostream>
 #include "vertex.h"
@@ -198,6 +200,23 @@ void GLWidget::setOffset(int offsetVal)
     if(offset) {
         init();
     }
+}
+
+void GLWidget::fetchFile()
+{
+    QString filename_ = QFileDialog::getOpenFileName(this, tr("Open SIF File"),"/Users");
+    std::string filename = filename_.toUtf8().constData();
+    try{
+        makeWithSIF(glMesh, filename);
+    }
+    catch(const regex_error& error){
+        std::cerr << "REGEX ERROR: " << error.what() << std::endl;
+    }
+    catch(...){
+        std::cerr << "SOME UNKNOWN ERROR HAPPENED!!!" << std::endl;
+    }
+
+    this->repaint();
 }
 
 void GLWidget::initializeGL()
