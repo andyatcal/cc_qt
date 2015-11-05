@@ -1,5 +1,11 @@
+#if __linux__
+ #include <GL/glut.h>
+ #include <GL/gl.h>
+#elif __APPLE__
+ #include <GLUT/GLUT.h>
+#endif
+
 #include <QApplication>
-#include <GLUT/GLUT.h>
 #include "mywidget.h"
 #include <QDesktopWidget>
 #include <QSurfaceFormat>

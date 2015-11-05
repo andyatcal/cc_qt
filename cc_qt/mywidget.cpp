@@ -1,6 +1,12 @@
+#if __linux__
+ #include <QVBoxLayout>
+ #include <QHBoxLayout>
+#elif __APPLE__
+ #include <QVBOXLAYOUT>
+ #include <QHBOXLAYOUT>
+#endif
+
 #include "mywidget.h"
-#include <QVBOXLAYOUT>
-#include <QHBOXLAYOUT>
 #include <QSlider>
 #include <QLabel>
 #include <QButtonGroup>

@@ -1,8 +1,14 @@
+#if __linux__
+ #include <GL/glut.h>
+ #include <GL/gl.h>
+#elif __APPLE__
+ #include <GLUT/GLUT.h>
+#endif
+
 #include "myglwidget.h"
 #include <QMouseEvent>
 #include <QOpenGLShaderProgram>
 #include <QCoreApplication>
-#include <GLUT/glut.h>
 #include <math.h>
 #include <iostream>
 #include "vertex.h"
@@ -218,7 +224,7 @@ void GLWidget::paintGL()
         glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, BLUE);
         glOffsetMesh.drawMesh();
     }
-    glutSwapBuffers();
+    // glutSwapBuffers(); /* Unnecessary? Does not work on Arch Linux QT 5 */
 }
 
 void GLWidget::resizeGL(int w, int h)
