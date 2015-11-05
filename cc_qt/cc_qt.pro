@@ -36,6 +36,11 @@ HEADERS  += \
 
 FORMS    +=
 
-mac: INCLUDEPATH = /usr/local/include
+linux-g++{
+    LIBS += -lglut -lGLU -lGL
+}
 
-mac: LIBS += -framework GLUT -framework OpenGL
+mac{
+    INCLUDEPATH = /usr/local/include
+    LIBS += -framework GLUT -framework OpenGL
+}
